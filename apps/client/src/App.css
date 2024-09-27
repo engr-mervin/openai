@@ -40,3 +40,16 @@
 .read-the-docs {
   color: #888;
 }
+
+.result-box {
+  width: 80vw;
+  text-wrap: wrap;
+  border: 1px solid black;
+}
+
+.result-box--result {
+  text-align: left;
+}
+.result-box--prompt {
+  text-align: right;
+}

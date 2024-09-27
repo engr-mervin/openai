@@ -4,6 +4,7 @@ import { Duplex } from "stream";
 import { uuid } from "uuidv4";
 import { WebSocketServer, WebSocket } from "ws";
 import OpenAI from "openai";
+import { ChatCompletionMessageParam } from "openai/resources";
 const openai = new OpenAI();
 const app = express();
 
@@ -44,19 +45,23 @@ wss.on("connection", (ws, req) => {
   const clientId = uuid();
   clients.set(clientId, ws);
   console.log(`Client added: ${clientId}`);
-
+  const messages: ChatCompletionMessageParam[] = [];
   ws.on("error", onSocketPostError);
 
   ws.on("message", async (msg, isBinary) => {
     if (ws.readyState === WebSocket.OPEN) {
+      messages.push({ role: "user", content: msg.toString() });
       const stream = await openai.chat.completions.create({
         model: "gpt-4o-mini",
-        messages: [{ role: "user", content: msg.toString() }],
+        messages,
         stream: true,
       });
+
+      ws.send("$$MSG_START");
       for await (const chunk of stream) {
         ws.send(chunk.choices[0]?.delta?.content || "");
       }
+      ws.send("$$MSG_END");
     }
   });
 

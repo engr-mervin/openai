@@ -1,35 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import "./App.css";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+interface History {
+  type: "prompt" | "result";
+  message: string;
+}
+const WS_URL = "ws://localhost:3000";
 function App() {
-  const [count, setCount] = useState(0)
+  const [prompt, setPrompt] = useState("");
+  const [history, setHistory] = useState<History[]>([]);
+  const [responding, setResponding] = useState(false);
 
+  const { sendMessage, lastMessage, readyState } = useWebSocket(WS_URL, {
+    onOpen: () => {
+      console.log(`Connected to Server!`);
+      //Remove loader
+    },
+  });
+
+  useEffect(() => {
+    if (lastMessage) {
+      if (lastMessage.data === "$$MSG_START") {
+        setHistory((prev) => {
+          const copy = [...prev];
+          copy.push({ type: "result", message: "" });
+          return copy;
+        });
+      } else if (lastMessage.data === "$$MSG_END") {
+        setResponding(false);
+      } else {
+        setHistory((prev) => {
+          const copy = [...prev];
+          copy[copy.length - 1].message += lastMessage.data;
+          return copy;
+        });
+      }
+    }
+  }, [lastMessage]);
+
+  function onSubmitQuery(e: FormEvent) {
+    e.preventDefault();
+    setResponding(true);
+    setPrompt("");
+    setHistory((prev) => [...prev, { type: "prompt", message: prompt }]);
+    sendMessage(prompt);
+  }
+
+  function onChangePrompt(e: ChangeEvent<HTMLTextAreaElement>) {
+    e.preventDefault();
+    setPrompt(e.target.value);
+  }
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <form onSubmit={onSubmitQuery}>
+          <textarea onChange={onChangePrompt} value={prompt}></textarea>
+          <button type="submit" disabled={readyState !== ReadyState.OPEN || responding}>
+            Send
+          </button>
+        </form>
+
+        <ul>
+          {history.map((h, idx) => (
+            <li key={idx}>
+              <pre className={`result-box result-box--${h.type}`}>{h.message}</pre>
+            </li>
+          ))}
+        </ul>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
