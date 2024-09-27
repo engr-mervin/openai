@@ -1,0 +1,21 @@
+{
+  "name": "openai",
+  "author": "John Mervin C. Bocatcat <mervin@eonox.dev> (https://www.eonox.dev/)",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "paths": {
+    "@my-monorepo/shared": [
+      "packages/shared/src"
+    ]
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  },
+  "scripts": {
+    "start-client": "npm run dev --workspace apps/client",
+    "start-server": "npm run dev --workspace apps/server"
+  }
+}
