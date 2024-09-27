@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { Request } from "express";
 import { Duplex } from "stream";
 import { uuid } from "uuidv4";
@@ -21,7 +22,7 @@ function onSocketPostError(e: Error) {
 
 const wss = new WebSocketServer({ noServer: true });
 
-server.on("ugrade", (req: Request, socket: Duplex, head: Buffer) => {
+server.on("upgrade", (req: Request, socket: Duplex, head: Buffer) => {
   socket.on("error", onSocketPreError);
 
   if (!!req.headers["BadAuth"]) {
@@ -33,6 +34,7 @@ server.on("ugrade", (req: Request, socket: Duplex, head: Buffer) => {
   wss.handleUpgrade(req, socket, head, (ws) => {
     socket.removeListener("error", onSocketPreError);
     wss.emit("connection", ws, req);
+    console.log(`Server upgraded to WS`);
   });
 });
 
@@ -41,6 +43,7 @@ const clients = new Map();
 wss.on("connection", (ws, req) => {
   const clientId = uuid();
   clients.set(clientId, ws);
+  console.log(`Client added: ${clientId}`);
 
   ws.on("error", onSocketPostError);
 
@@ -58,6 +61,7 @@ wss.on("connection", (ws, req) => {
   });
 
   ws.on("close", (statusCode, reason) => {
+    console.log(`Client deleted: ${clientId}`);
     clients.delete(clientId);
   });
 });
