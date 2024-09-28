@@ -1,0 +1,17 @@
+.prompt__form {
+  margin-top: 24px;
+  height: 12vh;
+  gap: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.prompt__input {
+  width: 100%;
+  resize: none;
+  padding: 12px 16px;
+}
+
+.prompt__button {
+  width: 104px;
+}

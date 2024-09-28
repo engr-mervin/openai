@@ -26,12 +26,6 @@ const wss = new WebSocketServer({ noServer: true });
 server.on("upgrade", (req: Request, socket: Duplex, head: Buffer) => {
   socket.on("error", onSocketPreError);
 
-  if (!!req.headers["BadAuth"]) {
-    socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
-    socket.destroy();
-    return;
-  }
-
   wss.handleUpgrade(req, socket, head, (ws) => {
     socket.removeListener("error", onSocketPreError);
     wss.emit("connection", ws, req);
@@ -48,7 +42,7 @@ wss.on("connection", (ws, req) => {
   const messages: ChatCompletionMessageParam[] = [];
   ws.on("error", onSocketPostError);
 
-  ws.on("message", async (msg, isBinary) => {
+  ws.on("message", async (msg, _) => {
     if (ws.readyState === WebSocket.OPEN) {
       messages.push({ role: "user", content: msg.toString() });
       const stream = await openai.chat.completions.create({
@@ -67,6 +61,7 @@ wss.on("connection", (ws, req) => {
 
   ws.on("close", (statusCode, reason) => {
     console.log(`Client deleted: ${clientId}`);
+    console.log(`Socket closed: ${statusCode}, ${reason}`);
     clients.delete(clientId);
   });
 });
