@@ -1,5 +1,4 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -42,14 +41,76 @@
 }
 
 .result-box {
-  width: 80vw;
+  background-color: #f3f3f3;
+  max-width: 60%;
+  padding: 8px 16px;
+  display: inline-block;
   text-wrap: wrap;
   border: 1px solid black;
 }
 
-.result-box--result {
+.result-list-item--result {
   text-align: left;
 }
-.result-box--prompt {
+.result-list-item--result .result-box {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.result-list-item--prompt {
   text-align: right;
+}
+.result-list-item--prompt .result-box {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.result-list {
+  width: 80vw;
+  height: 72vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 8px;
+  overflow-y: auto;
+}
+
+.result-list-item {
+  list-style: none;
+}
+
+.prompt-input-box {
+  width: calc(80vw - 120px);
+  resize: none;
+  padding: 12px 16px;
+}
+
+.prompt-input-button {
+  width: 104px;
+}
+form {
+  margin-top: 24px;
+  height: 12vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
