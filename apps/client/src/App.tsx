@@ -19,6 +19,7 @@ function App() {
   const [history, setHistory] = useState<History[]>([]);
   return (
     <div className="app">
+      <h1 className="title">Open AI Chat</h1>
       <MessageHistory history={history}></MessageHistory>
       <PromptForm sendMessage={sendMessage} lastMessage={lastMessage} readyState={readyState} changeHistory={setHistory}></PromptForm>
     </div>

@@ -1,7 +1,16 @@
 #root {
   margin: 0 auto;
-  padding: 2rem;
+  padding: 5vh 0;
   text-align: center;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  margin: 0;
+  height: 10vh;
 }
 
 ::-webkit-scrollbar {

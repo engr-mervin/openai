@@ -59,9 +59,10 @@ To run the application, you'll need to start both the server and the client:
    npm run dev-server
    ```
 
-2. In a separate terminal window, start the development client:
+2. In a separate terminal window, open the same openai folder and start the development client:
 
    ```bash
+   cd openai
    npm run dev-client
    ```
 

@@ -1,5 +1,5 @@
 .prompt__form {
-  margin-top: 24px;
+  margin-top: 4vh;
   height: 12vh;
   gap: 16px;
   display: flex;
@@ -10,8 +10,19 @@
   width: 100%;
   resize: none;
   padding: 12px 16px;
+  outline: none;
+  border: 1.5px solid black;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .prompt__button {
   width: 104px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #87ceeb;
+  color: #111;
+  min-width: 104px;
+  font-size: 16px;
 }

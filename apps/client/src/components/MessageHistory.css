@@ -1,6 +1,7 @@
 .message-list {
   width: 80vw;
-  height: 72vh;
+  margin: 0;
+  height: 64vh;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -22,7 +23,7 @@
 }
 
 .message-box {
-  background-color: #f3f3f3;
+  background-color: hsl(198, 26%, 87%);
   max-width: 60%;
   padding: 8px 16px;
   display: inline-block;
